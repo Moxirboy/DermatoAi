@@ -1,0 +1,373 @@
+basePath: /api/v1
+definitions:
+  domain.NewMessage:
+    properties:
+      id:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.Choices:
+    properties:
+      content:
+        type: string
+      is_true:
+        type: boolean
+    type: object
+  dto.Fact:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      number_of_question:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.FactQuestions:
+    properties:
+      choices:
+        items:
+          $ref: '#/definitions/dto.Choices'
+        type: array
+      fact_id:
+        type: integer
+      id:
+        type: integer
+      question:
+        type: string
+    type: object
+  dto.Item:
+    properties:
+      activity_code:
+        type: string
+      activity_title:
+        type: string
+      anons:
+        type: string
+      anons_image:
+        type: string
+      category_code:
+        type: string
+      category_id:
+        type: integer
+      category_title:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      url_to_web:
+        type: string
+      views:
+        type: integer
+    type: object
+  dto.Response:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.Item'
+        type: array
+    type: object
+  dto.User:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UserInfo:
+    properties:
+      firstname:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      skin_color:
+        type: integer
+      skin_type:
+        type: integer
+    type: object
+host: web.binaryhood.uz
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a  server skin ai server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Skin Ai Swagger
+  version: "1.0"
+paths:
+  /dashboard/fillUserInfo:
+    post:
+      consumes:
+      - application/json
+      description: User Info with the input attributes
+      parameters:
+      - description: User Info
+        in: body
+        name: user_info
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserInfo'
+      summary: User info
+      tags:
+      - users
+  /dashboard/middle/buy_premium:
+    get:
+      description: buy premium user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: buy premium
+      tags:
+      - users
+  /dashboard/middle/get-point:
+    get:
+      description: get user point
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get user point
+      tags:
+      - users
+  /dashboard/middle/get_premium:
+    get:
+      description: get premium user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: get premium
+      tags:
+      - users
+  /dashboard/middle/send-request:
+    post:
+      description: Creates a new fact question and returns the created fact questions.
+      operationId: message
+      parameters:
+      - description: List of fact questions to be created
+        in: body
+        name: fact
+        required: true
+        schema:
+          $ref: '#/definitions/domain.NewMessage'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/domain.NewMessage'
+            type: array
+      summary: Create a fact question
+      tags:
+      - message
+  /dashboard/showUserInfo:
+    get:
+      consumes:
+      - application/json
+      description: Get User Info
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserInfo'
+      summary: User info
+      tags:
+      - users
+  /fact/AnswerQuestion:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the ID and offset from the query parameters.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get ID and Offset
+      tags:
+      - fact
+  /fact/GetQuestion:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the ID and offset from the query parameters.
+      parameters:
+      - default: '"default_id"'
+        description: ID
+        in: query
+        name: id
+        type: string
+      - default: '"0"'
+        description: Offset
+        in: query
+        name: offset
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FactQuestions'
+      summary: Get ID and Offset
+      tags:
+      - fact
+  /fact/create:
+    post:
+      description: create fact
+      operationId: create-fact
+      parameters:
+      - description: Fact
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Fact'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Fact'
+      summary: create fact
+      tags:
+      - fact
+  /fact/createQuestions:
+    post:
+      description: Creates a new fact question and returns the created fact questions.
+      operationId: create-fact-question
+      parameters:
+      - description: List of fact questions to be created
+        in: body
+        name: fact
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.FactQuestions'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/dto.FactQuestions'
+            type: array
+      summary: Create a fact question
+      tags:
+      - fact
+  /fact/getFact:
+    get:
+      description: Get a 5 facts
+      operationId: get-fact
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.Fact'
+            type: array
+      summary: Get a fact
+      tags:
+      - fact
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user with the input username,password
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+      summary: Login user
+      tags:
+      - users
+  /news/getall:
+    get:
+      description: Get all news with pagination
+      operationId: get-all-news
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Get all news
+      tags:
+      - news
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: signup user with the input email,password
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.User'
+      summary: Signup user
+      tags:
+      - users
+swagger: "2.0"
